@@ -1,0 +1,922 @@
+/* 
+  We've already included normalize.css. 
+
+  But we'd like a modern looking boilerplate. 
+  Clean type, sans-serif, and a nice color palette. 
+  
+*/
+
+body {
+  font-family: 'Courier New', Courier, monospace; /* Monospace font */
+  font-size: 16px;
+  line-height: 1.5;
+  color: #999;
+  background-color: black;
+  text-align: center;
+  padding-top: 40px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: inherit; /* Inherit monospace font from body */
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+#app {
+  padding: 1rem;
+}
+
+h1 {
+  color: white;
+}
+
+b {
+  color: white;
+  font-weight: bold;
+}
+
+a {
+  color: #ccc;
+  text-decoration-line: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: #555;
+}
+
+.App {
+  text-align: center;
+  padding: 0px; /* Removed padding */
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Keep .globe-container simple for layout purposes here */
+.globe-container {
+  /* display: flex; */ /* Removed flex */
+  /* justify-content: space-between; */ /* Removed flex */
+  /* align-items: flex-start; */ /* Removed flex */
+  position: relative; /* Keep relative positioning if needed */
+  width: fit-content; /* Size to the canvas */
+  margin: 0 auto; /* Center the container itself */
+}
+
+/* Remove global canvas margin */
+/* canvas {
+  margin: 0 auto;
+} */
+
+/* Removed old .cities-section, .cities-title, .cities-panel styles */
+
+@keyframes scrollAnimationLeftToRight {
+  0% { transform: translateX(-50%); } /* Start from the beginning of the second half */
+  100% { transform: translateX(0); } /* End at the beginning of the first half */
+}
+
+.cities-carousel-container {
+  /* Adjust width relative to map-area */
+  width: 100%; /* Take full width of map-area */
+  max-width: 1400px; /* Further increased max-width */
+  margin: 10px auto 0; /* Reduced top margin, keep centered */
+  overflow: hidden;
+  position: relative; /* For potential fade effects */
+  padding: 5px 0; /* Add some vertical padding */
+}
+
+/* Optional: Add fade effect on edges */
+.cities-carousel-container::before,
+.cities-carousel-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50px; /* Width of the fade */
+  z-index: 2;
+}
+.cities-carousel-container::before {
+  left: 0;
+  background: linear-gradient(to right, black, transparent);
+}
+.cities-carousel-container::after {
+  right: 0;
+  background: linear-gradient(to left, black, transparent);
+}
+
+
+.cities-carousel-track {
+  display: flex;
+  /* Width and justification will be controlled by JS adding/removing classes */
+  /* Apply the animation - duration is now set dynamically via JS */
+  animation: scrollAnimationLeftToRight linear infinite; /* Removed fixed duration */
+  gap: 15px; /* Space between items */
+}
+
+/* Class applied when content does NOT overflow */
+.cities-carousel-track.carousel-static-centered {
+  width: 100%;
+  justify-content: center;
+}
+
+.cities-carousel-track:hover {
+  animation-play-state: paused; /* Pause scroll on hover */
+}
+
+
+.city-item-horizontal { /* Renamed from .city-item */
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 15px; /* Reduced vertical padding, increased horizontal */
+  border-radius: 8px;
+  color: white;
+  display: inline-flex; /* Keep as inline-flex */
+  align-items: center;
+  gap: 8px;
+  min-width: 150px; /* Added minimum width */
+  white-space: nowrap; /* Keep nowrap */
+  flex-shrink: 0; /* Keep flex-shrink */
+}
+
+.cta-button {
+  background-color: #eee; /* Light background */
+  color: #333; /* Dark text */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-family: inherit; /* Use body font */
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px; /* Space above the button */
+  margin-bottom: 5px; /* Space below the button */
+  transition: background-color 0.2s ease;
+}
+
+.cta-button:hover {
+  background-color: #ccc; /* Darker on hover */
+}
+
+.online-counter {
+  display: inline-flex; /* Align dot and text */
+  align-items: center; /* Vertically center */
+  gap: 6px; /* Space between dot and text */
+  margin-top: 10px; /* Reduced space above the counter */
+}
+
+.online-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%; /* Make it a circle */
+  animation: blinkRed 2.5s infinite ease-in-out; /* Add blinking animation */
+}
+
+@keyframes blinkRed {
+  0%, 100% {
+    background-color: rgb(255, 25, 25); /* Bright red */
+    box-shadow: 0 0 3px rgb(255, 25, 25); /* Subtle glow */
+    transform: scale(1.0); /* Normal size */
+  }
+  50% {
+    background-color: rgb(180, 20, 20); /* Dimmer red */
+    box-shadow: 0 0 1px rgb(180, 20, 20); /* Dimmer glow */
+    transform: scale(0.8); /* Shrink */
+  }
+  /* Optional: Add a slightly larger phase if desired */
+  /* 25% { transform: scale(1.1); } */
+  /* 75% { transform: scale(1.1); } */
+}
+
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top */
+}
+
+.modal-content {
+  background-color: #222; /* Dark background for modal */
+  padding: 30px;
+  border-radius: 8px;
+  color: #eee; /* Light text */
+  position: relative;
+  min-width: 300px;
+  max-width: 500px;
+  text-align: left; /* Align text left inside modal */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: white;
+  text-align: center; /* Center modal title */
+}
+
+.modal-content p {
+  color: #ccc; /* Lighter paragraph text */
+  margin-bottom: 15px;
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #aaa;
+  cursor: pointer;
+  line-height: 1;
+}
+.modal-close-button:hover {
+  color: white;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #333;
+  color: white;
+  font-family: inherit;
+  font-size: 1rem;
+  box-sizing: border-box; /* Include padding and border in width */
+}
+
+.modal-input::placeholder {
+  color: #888;
+}
+
+.modal-submit-button {
+  background-color: #eee;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block; /* Allow width to fit content */
+  /* width: 40%; */ /* Removed fixed width */
+  /* margin: 0 auto; */ /* Removed margin auto, centering handled by parent text-align */
+  /* Need to wrap in a block container to center inline-block */
+  /* This will be handled by ensuring the parent container uses text-align: center */
+  /* Or by adding a wrapper div if needed, but let's try this first */
+  transition: background-color 0.2s ease;
+}
+
+/* Ensure the button's container allows centering */
+.modal-content {
+  /* ... existing styles ... */
+  text-align: center; /* Center inline-block children */
+}
+
+.modal-submit-button:hover {
+  background-color: #ccc;
+}
+
+/* Re-apply text-align left for other content if needed */
+.modal-content h2 {
+  /* ... existing styles ... */
+  text-align: center; /* Keep title centered */
+}
+.modal-content p {
+   /* ... existing styles ... */
+  text-align: left; /* Keep paragraphs left-aligned */
+}
+.modal-input {
+   /* ... existing styles ... */
+  text-align: left; /* Keep input text left-aligned */
+}
+
+
+/* New Layout Styles */
+.main-content {
+  position: relative; /* Needed for absolute positioning of children */
+  margin-top: 30px; /* Space below header */
+  margin-bottom: 30px; /* Space above carousel */
+  padding: 0; /* Remove padding to allow panel to go to edge */
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 620px; /* Ensure container is tall enough for panel */
+  /* No flex needed here if panel is absolute */
+}
+
+.left-panel {
+  position: absolute; /* Take panel out of flow */
+  left: -40px; /* Use negative value to pull further left */
+  top: 0; /* Align to the top of main-content */
+  width: 300px; /* Fixed width for the panel */
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 15px;
+  height: 600px; /* Match map height */
+  display: flex;
+  flex-direction: column;
+  z-index: 10; /* Ensure it's above other elements if needed */
+}
+
+.right-panel {
+  position: absolute; /* Take panel out of flow */
+  right: -40px; /* Use negative value to pull further right */
+  top: 0; /* Align to the top of main-content */
+  width: 300px; /* Fixed width for the panel */
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 15px;
+  height: 600px; /* Match map height */
+  display: flex;
+  flex-direction: column;
+  z-index: 10; /* Ensure it's above other elements if needed */
+}
+
+.map-area {
+  /* This area now effectively spans the full width behind the panel */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center children (globe, counter) horizontally */
+  justify-content: flex-start; /* Align map to top */
+  min-width: 600px; /* Ensure enough space for the map */
+  width: 100%; /* Span the full width of main-content */
+  padding-top: 0;
+  /* No margin-left needed */
+}
+
+/* Ensure globe-container is centered within the full-width map-area */
+.globe-container {
+  width: fit-content;
+  margin: 0 auto; /* Center horizontally */
+  position: relative;
+}
+
+.location-search {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #333;
+  color: white;
+  font-family: inherit;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.location-search::placeholder {
+  color: #888;
+}
+
+.listings-list {
+  flex-grow: 1; /* Take remaining vertical space */
+  overflow-y: auto; /* Enable vertical scrolling */
+  background-color: #222; /* Slightly different background for list area */
+  border-radius: 4px;
+  padding: 10px;
+}
+
+/* Custom scrollbar for Webkit browsers */
+.listings-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.listings-list::-webkit-scrollbar-track {
+  background: #222;
+  border-radius: 4px;
+}
+
+.listings-list::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+  border: 2px solid #222; /* Creates padding around thumb */
+}
+
+.listing-item {
+  background-color: #333;
+  color: #ccc;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: left; /* Left-align text */
+}
+
+.listing-item:last-child {
+  margin-bottom: 0;
+}
+
+.listing-item:hover {
+  background-color: #444;
+  color: white;
+}
+
+/* Search Input Styles */
+.search-container {
+  /* position: relative; */ /* No longer needed for icon positioning */
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+/* Removed .search-icon styles */
+
+.location-search {
+  /* Keep existing styles */
+  width: 100%;
+  /* padding: 10px 10px 10px 35px; */ /* Remove specific padding for icon */
+  padding: 10px; /* Restore default padding */
+  margin-bottom: 0; /* Remove margin-bottom as it's now on the container */
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #333;
+  color: white;
+  font-family: inherit;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+/* Hide the default clear 'x' button in WebKit browsers */
+.location-search::-webkit-search-decoration,
+.location-search::-webkit-search-cancel-button,
+.location-search::-webkit-search-results-button,
+.location-search::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  display: none;
+}
+
+/* Hide the clear button in IE/Edge */
+.location-search::-ms-clear {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Firefox doesn't have a standard way to hide the 'x' via CSS */
+/* It might require JS or setting type="text" instead of "search" */
+
+/* Panel Heading Style */
+.panel-heading {
+  color: white;
+  font-size: 1.1rem; /* Adjust size as needed */
+  margin-bottom: 15px; /* Space below heading */
+  text-align: left; /* Align heading text left */
+}
+
+/* Style for user location in panel heading */
+.user-location {
+  color: #00ff00; /* Bright green */
+  font-weight: bold; /* Optional: make it bold */
+}
+
+/* --- Thrift Store Card Styles --- */
+
+.thrift-store-list {
+  flex-grow: 1; /* Take remaining vertical space */
+  overflow-y: auto; /* Enable vertical scrolling */
+  /* background-color: #222; */ /* Use panel background */
+  border-radius: 4px;
+  padding: 5px; /* Add some padding around cards */
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Reduced space between cards */
+}
+
+/* Custom scrollbar for Thrift Store List */
+.thrift-store-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.thrift-store-list::-webkit-scrollbar-track {
+  background: #1a1a1a; /* Match panel background */
+  border-radius: 4px;
+}
+
+.thrift-store-list::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+  border: 2px solid #1a1a1a; /* Creates padding around thumb */
+}
+
+
+.thrift-store-card {
+  background-color: #282828; /* Darker card background */
+  border-radius: 8px;
+  /* overflow: hidden; */ /* Removed: Might be clipping details */
+  color: #ccc;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* More standard sans-serif */
+  font-size: 0.9rem;
+  text-align: left;
+  border: 1px solid #444; /* Subtle border */
+  /* Remove hover effects to save space/complexity if needed */
+  /* transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; */
+}
+
+/* Remove hover effect */
+/* .thrift-store-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+} */
+
+/* Style for the image */
+.thrift-store-image {
+  width: 100%;
+  height: 80px; /* Significantly reduced image height */
+  object-fit: cover; /* Cover the area, might crop */
+  display: block; /* Remove extra space below image */
+  border-top-left-radius: 7px; /* Match card radius */
+  border-top-right-radius: 7px;
+  background-color: #333; /* Background for loading/error */
+}
+
+
+/* Style for the image placeholder */
+.thrift-store-image-placeholder { /* You might need this class in your component's onError */
+  width: 100%;
+  height: 80px; /* Match image height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  color: #888;
+  font-style: italic;
+  font-size: 0.8rem; /* Smaller placeholder text */
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.thrift-store-details {
+  padding: 8px; /* Reduced padding */
+}
+
+.thrift-store-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4px; /* Reduced margin */
+}
+
+.thrift-store-name {
+  font-size: 0.9rem; /* Reduced font size */
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  line-height: 1.2; /* Reduced line height */
+  flex-grow: 1;
+  margin-right: 5px; /* Reduced space */
+  /* Allow wrapping */
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.thrift-store-rating {
+  display: flex;
+  align-items: center;
+  color: #ffc107;
+  font-weight: bold;
+  font-size: 0.8rem; /* Reduced font size */
+  flex-shrink: 0;
+  margin-top: 1px; /* Align better with potentially wrapped name */
+}
+
+.star-icon {
+  width: 12px; /* Smaller icon */
+  height: 12px; /* Smaller icon */
+  margin-right: 3px; /* Reduced space */
+  fill: currentColor;
+}
+
+/* Base style for info lines (address, phone, website) */
+.thrift-store-info-line {
+  display: flex;
+  align-items: center;
+  color: #aaa;
+  font-size: 0.75rem; /* Reduced font size */
+  margin-bottom: 4px; /* Reduced margin */
+  line-height: 1.3; /* Adjust line height */
+  /* Allow wrapping */
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.thrift-store-info-line:last-child {
+  margin-bottom: 0; /* No margin on the last item */
+}
+
+.thrift-store-info-line svg {
+  width: 11px; /* Smaller icons */
+  height: 11px; /* Smaller icons */
+  margin-right: 4px; /* Reduced space */
+  fill: #aaa;
+  flex-shrink: 0;
+}
+
+.thrift-store-info-line a {
+  color: #bbb; /* Slightly lighter link color */
+  text-decoration: none; /* Remove underline */
+  word-break: break-all; /* Break long URLs */
+}
+.thrift-store-info-line a:hover {
+  text-decoration: underline; /* Underline on hover */
+  color: #ddd;
+}
+
+/* Apply base style to specific lines */
+.thrift-store-address {
+  /* Extends .thrift-store-info-line */
+}
+.thrift-store-phone {
+  /* Extends .thrift-store-info-line */
+}
+.thrift-store-website {
+  /* Extends .thrift-store-info-line */
+}
+
+/* Remove specific icon classes if base style is sufficient */
+/* .location-icon, .phone-icon, .website-icon { ... } */
+
+
+/* Removed .thrift-store-tags and .tag styles */
+
+/* Style for Address Text */
+.thrift-store-address-text {
+  color: #aaa;
+  font-size: 0.75rem; /* Match other info lines */
+  margin-bottom: 6px; /* Space before action buttons */
+  line-height: 1.3;
+  /* Allow wrapping */
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Style for Phone Badge */
+.phone-badge {
+  color: #aaa;
+  font-size: 0.75rem; /* Match other info lines */
+  margin-top: 4px; /* Space below address */
+  margin-bottom: 6px; /* Space before action buttons */
+  line-height: 1.3;
+  display: flex; /* Align icon and text */
+  align-items: center; /* Vertically center icon and text */
+  gap: 4px; /* Space between icon and text */
+  /* Allow wrapping */
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.phone-badge .inline-icon {
+  width: 14px; /* Match icon size used in component */
+  height: 14px; /* Match icon size used in component */
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+/* Style for the clickable phone badge link */
+.phone-badge-link {
+  text-decoration: none; /* Remove default underline */
+  color: inherit; /* Inherit color from parent (.phone-badge) */
+  cursor: pointer;
+}
+
+.phone-badge-link:hover .phone-badge {
+  color: #ddd; /* Slightly lighten text on hover */
+  text-decoration: underline; /* Add underline on hover */
+  text-decoration-color: #777; /* Match link underline color */
+}
+
+
+.thrift-store-website-text {
+  color: #aaa;
+  font-size: 0.75rem; /* Match other info lines */
+  margin-bottom: 0px; /* Space before action buttons */
+  line-height: 1.5;
+  /* Allow wrapping */
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+
+/* --- Action Button Styles --- */
+.thrift-store-actions {
+  margin-top: 8px; /* Space above the buttons */
+  display: flex;
+  gap: 8px; /* Space between buttons */
+}
+
+.action-button {
+  display: inline-flex; /* Align icon inside */
+  align-items: center;
+  justify-content: center;
+  padding: 5px; /* Small padding */
+  background-color: #444; /* Button background */
+  color: #ccc; /* Icon color */
+  border: none;
+  border-radius: 4px; /* Slightly rounded corners */
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  text-decoration: none; /* Remove underline from link */
+}
+
+.action-button:hover {
+  background-color: #555;
+  color: white;
+}
+
+/* Removed conflicting .action-button svg rule */
+/* .action-button svg {
+  width: 14px; 
+  height: 14px; 
+  fill: currentColor; 
+} */
+
+/* Styles for the new simplified buttons */
+.simplified-button {
+  padding: 5px 8px; /* Adjust padding */
+  gap: 5px; /* Space between icon and text */
+}
+
+.simplified-button .button-icon {
+  width: 16px; /* Match icon size used in component */
+  height: 16px; /* Match icon size used in component */
+  /* vertical-align: middle; */ /* Handled by flex alignment */
+}
+
+
+/* Icon styling (general) */
+.inline-icon {
+  display: inline-block; /* Ensure it behaves like text */
+  vertical-align: middle; /* Align vertically with text */
+  height: 1em; /* Match font size */
+  width: 1em; /* Match font size */
+  fill: currentColor; /* Use text color */
+}
+
+.location-pin-icon {
+  /* Specific adjustments for the pin icon if needed */
+  margin-right: 4px; /* Space between icon and text */
+  /* height: 0.9em; */ /* Slightly smaller if needed */
+  /* width: 0.9em; */
+}
+
+
+/* --- React Select Styles (Nominatim Autocomplete) --- */
+
+/* Container for the select component */
+.location-search-select {
+  width: 100%; /* Take full width within search-container */
+  font-family: inherit; /* Use body font */
+  font-size: 0.9rem;
+  color: #ccc; /* Default text color */
+  box-sizing: border-box;
+}
+
+/* The main input control area */
+.react-select__control {
+  background-color: #333 !important; /* Match input background */
+  border: 1px solid #555 !important;
+  border-radius: 4px !important;
+  min-height: 38px; /* Match input height */
+  box-shadow: none !important; /* Remove default shadow */
+  cursor: text;
+}
+.react-select__control--is-focused {
+  border-color: #777 !important; /* Slightly lighter border on focus */
+}
+
+/* The actual input element */
+.react-select__input-container,
+.react-select__input {
+  color: white !important; /* Input text color */
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left; /* Ensure input text is left-aligned */
+}
+
+/* Placeholder text */
+.react-select__placeholder {
+  color: #888 !important; /* Match input placeholder color */
+  margin-left: 2px;
+  margin-right: 2px;
+  text-align: left; /* Ensure placeholder is left-aligned */
+}
+
+/* Value displayed when an option is selected */
+.react-select__single-value {
+  color: white !important; /* Selected value text color */
+  margin-left: 2px;
+  margin-right: 2px;
+  text-align: left; /* Ensure selected value is left-aligned */
+  /* Remove padding added for the old icon */
+  /* padding-left: 28px !important; */
+}
+
+/* Also remove padding from the value container */
+.react-select__value-container {
+  /* padding-left: 28px !important; */ /* Remove padding */
+  /* Default padding is handled internally by react-select, ensure it's not overridden if needed */
+  /* padding-left: 2px !important; */ /* Minimal padding if needed */
+}
+
+
+/* Dropdown menu */
+.react-select__menu {
+  background-color: #282828 !important; /* Dark background for dropdown */
+  border: 1px solid #555 !important;
+  border-radius: 4px !important;
+  margin-top: 4px !important; /* Small space between control and menu */
+  z-index: 20; /* Ensure menu is above other elements */
+}
+
+/* List within the menu */
+.react-select__menu-list {
+  padding: 4px 0 !important; /* Add some padding */
+}
+
+/* Individual option item */
+.react-select__option {
+  background-color: transparent !important; /* Default background */
+  color: #ccc !important; /* Default text color */
+  cursor: pointer;
+  padding: 8px 12px !important;
+  text-align: left; /* Left-align option text */
+}
+.react-select__option--is-focused {
+  background-color: #444 !important; /* Background on hover/focus */
+  color: white !important;
+}
+.react-select__option--is-selected {
+  background-color: #555 !important; /* Background for selected item */
+  color: white !important;
+  font-weight: bold;
+}
+
+/* No options message */
+.react-select__menu-notice--no-options,
+.react-select__menu-notice--loading {
+  color: #888 !important;
+  padding: 8px 12px !important;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Indicators (dropdown arrow, clear button) */
+.react-select__indicator-separator {
+  background-color: #555 !important; /* Separator color */
+}
+.react-select__dropdown-indicator,
+.react-select__clear-indicator {
+  color: #888 !important; /* Icon color */
+  padding: 8px;
+}
+.react-select__dropdown-indicator:hover,
+.react-select__clear-indicator:hover {
+  color: #ccc !important; /* Icon color on hover */
+}
+
+/* --- City Card Styles (Top 100) --- */
+
+.city-card-list {
+  /* Inherits from .listings-list for scrollbar and padding */
+  /* Add specific styles if needed */
+}
+
+.city-card {
+  /* Inherits base styles from .listing-item */
+  display: flex; /* Use flex for better alignment */
+  align-items: center; /* Vertically align flag and text */
+  background-color: #3a3a3a; /* Slightly different background */
+  border-left: 3px solid #666; /* Add a subtle left border */
+  padding: 10px 12px; /* Adjust padding */
+}
+
+.city-card:hover {
+  background-color: #4a4a4a; /* Darker hover */
+  border-left-color: #888;
+}
+
+.city-card .city-name {
+  font-weight: 500; /* Slightly bolder city name */
+  color: #eee; /* Brighter city name */
+  margin-right: 4px; /* Space before comma */
+}
+
+.city-card .country-name {
+  color: #bbb; /* Slightly dimmer country name */
+  font-size: 0.85rem; /* Smaller country name */
+}

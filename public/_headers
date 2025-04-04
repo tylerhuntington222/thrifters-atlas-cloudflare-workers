@@ -1,0 +1,5 @@
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-MjM0NTc5MDEyNywzOTQwNjEyNDEx' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://via.placeholder.com data:; connect-src 'self' wss://*.partykit.dev ws://localhost:* http://localhost:* https://*.cloudflareinsights.com https://www.google-analytics.com https://region1.google-analytics.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
